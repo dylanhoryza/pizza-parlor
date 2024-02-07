@@ -22,10 +22,23 @@ connection.once('open', async () => {
   }
   
   try {
-    // Insert pizzas
-    await Pizza.insertMany(pizzas);
-    // Insert Toppings
-    await Toppings.insertMany(toppings);
+    // Insert toppings into the database
+    const insertedToppings = await Toppings.insertMany(toppings);
+
+    // Create a mapping of topping names to their ObjectId values
+    const toppingMap = {};
+    insertedToppings.forEach(topping => {
+      toppingMap[topping.name] = topping._id;
+    });
+
+    // Modify pizzas data to replace topping names with ObjectId values
+    const pizzasWithToppings = pizzas.map(pizza => ({
+      ...pizza,
+      toppings: pizza.toppings.map(toppingName => toppingMap[toppingName])
+    }));
+
+    // Insert pizzas into the database
+    await Pizza.insertMany(pizzasWithToppings);
 
     console.log('Database seeded successfully');
   } catch (error) {

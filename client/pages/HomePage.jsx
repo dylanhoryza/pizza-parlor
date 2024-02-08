@@ -218,7 +218,7 @@ export default function HomePage() {
         <div className='col-md-6'>
           <div className='card toppings-card'>
             <div className='card-body'>
-              <h5 className='card-title'>Toppings</h5>
+              <h5 className='card-title'>Manage Toppings</h5>
               <ul className='list-group'>
                 {toppingsList.map((topping) => (
                   <li
@@ -280,7 +280,7 @@ export default function HomePage() {
         <div className='col-md-6'>
           <div className='card pizzas-card'>
             <div className='card-body'>
-              <h5 className='card-title'>Pizzas</h5>
+              <h5 className='card-title'>Manage Pizzas</h5>
               <ul className='list-group'>
                 {pizzasList.map((pizza) => (
                   <li
@@ -372,7 +372,7 @@ export default function HomePage() {
         <div className='col-md-6'>
           <div className='card create-pizza-card'>
             <div className='card-body'>
-              <h5 className='card-title'>Create Pizza</h5>
+              <h5 className='card-title'>Create New Pizza</h5>
               <form onSubmit={handleCreatePizza}>
                 <div className='mb-3'>
                   <label htmlFor='pizzaName' className='form-label'>

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import deleteIcon from '../src/assets/trash-solid.svg'
+import editIcon from '../src/assets/pen-to-square-solid.svg'
 import {
   getAllToppings,
   createTopping,
@@ -42,6 +44,13 @@ export default function HomePage() {
   // Function to handle creation of new topping
   const handleCreateTopping = async () => {
     try {
+      const existingTopping = toppingsList.find(
+        (topping) => topping.name === newToppingName
+      );
+      if (existingTopping) {
+        alert(`Topping "${newToppingName}" already exists!`);
+        return; // Exit function if topping already exists
+      }
       const res = await createTopping({ name: newToppingName }); // Send the new topping name to the API
       if (!res.ok) {
         throw new Error('Failed to create topping');
@@ -127,6 +136,13 @@ export default function HomePage() {
   const handleCreatePizza = async (e) => {
     e.preventDefault();
     try {
+      const existingPizza = pizzasList.find(
+        (pizza) => pizza.name === pizzaName
+      );
+      if (existingPizza) {
+        alert(`Pizza "${pizzaName}" already exists!`);
+        return; // Exit function if pizza already exists
+      }
       const res = await createPizza({
         name: pizzaName,
         toppings: selectedToppings,
@@ -134,8 +150,8 @@ export default function HomePage() {
       if (!res.ok) {
         throw new Error('Failed to create pizza');
       }
-      const createdPizza = await res.json(); // Parse the response to get the created pizza data
-      setPizzas([...pizzasList, createdPizza]); // Update the list of pizzas with the newly created pizza
+      const createdPizza = await res.json();
+      setPizzas([...pizzasList, createdPizza]);
       setPizzaName(''); // Clear the pizza name input field
       setSelectedToppings([]); // Clear the selected toppings
     } catch (error) {
@@ -197,188 +213,204 @@ export default function HomePage() {
 
   return (
     <div className='container mt-5'>
-      <div className='card'>
-        <div className='card-body'>
-          <h5 className='card-title'>Toppings</h5>
-          <ul className='list-group'>
-            {toppingsList.map((topping) => (
-              <li
-                key={topping._id}
-                className='list-group-item d-flex justify-content-between align-items-center'
-              >
-                {editingToppingId === topping._id ? (
-                  <>
-                    <input
-                      type='text'
-                      value={editedToppingName}
-                      onChange={(e) => setEditedToppingName(e.target.value)}
-                      placeholder='Enter new topping name'
-                    />
-                    <button
-                      type='button'
-                      className='btn btn-success ms-2'
-                      onClick={() =>
-                        handleSaveTopping(topping._id, editedToppingName)
-                      }
-                    >
-                      Save
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {topping.name}
+      <h1 className='page-title'>Pizza Parlor</h1>
+      <div className='row'>
+        <div className='col-md-6'>
+          <div className='card toppings-card'>
+            <div className='card-body'>
+              <h5 className='card-title'>Toppings</h5>
+              <ul className='list-group'>
+                {toppingsList.map((topping) => (
+                  <li
+                    key={topping._id}
+                    className='list-group-item d-flex justify-content-between align-items-center'
+                  >
+                    {editingToppingId === topping._id ? (
+                      <>
+                        <input
+                          type='text'
+                          value={editedToppingName}
+                          onChange={(e) => setEditedToppingName(e.target.value)}
+                          placeholder='Enter new topping name'
+                        />
+                        <button
+                          type='button'
+                          className='btn btn-success ms-2'
+                          onClick={() =>
+                            handleSaveTopping(topping._id, editedToppingName)
+                          }
+                        >
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {topping.name}
+                        <div>
+                        <img
+                            src={editIcon}
+                            alt='Edit'
+                            className='ms-2 delete-btn-img'
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handleEditTopping(topping._id, topping.name)}
+                          />
+                          <img
+                            src={deleteIcon}
+                            alt='Delete'
+                            className='ms-2 delete-btn-img'
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handleDeleteTopping(topping._id)}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <input className='topping-input'
+                type='text'
+                value={newToppingName}
+                onChange={(e) => setNewToppingName(e.target.value)}
+                placeholder='Enter new topping name'
+              />
+              <button className='add-topping-btn btn btn-success' onClick={handleCreateTopping}>Add Topping</button>
+            </div>
+          </div>
+        </div>
+        <div className='col-md-6'>
+          <div className='card pizzas-card'>
+            <div className='card-body'>
+              <h5 className='card-title'>Pizzas</h5>
+              <ul className='list-group'>
+                {pizzasList.map((pizza) => (
+                  <li
+                    key={pizza._id}
+                    className='list-group-item d-flex justify-content-between align-items-center'
+                  >
                     <div>
-                      <button
-                        type='button'
-                        className='btn btn-primary ms-2'
-                        onClick={() =>
-                          handleEditTopping(topping._id, topping.name)
-                        }
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type='button'
-                        className='btn btn-danger ms-2'
-                        onClick={() => handleDeleteTopping(topping._id)}
-                      >
-                        Delete
-                      </button>
+                      {editingPizzaId === pizza._id ? (
+                        <>
+                          <input
+                            type='text'
+                            value={editedPizzaName}
+                            onChange={(e) => setEditedPizzaName(e.target.value)}
+                            placeholder='Enter new pizza name'
+                          />
+                          <div className='mb-3'>
+                            <label className='form-label'>Toppings:</label>
+                            {toppingsList.map((topping) => (
+                              <div key={topping._id} className='form-check'>
+                                <input
+                                  className='form-check-input'
+                                  type='checkbox'
+                                  id={topping._id}
+                                  value={topping._id}
+                                  checked={selectedToppings.includes(
+                                    topping._id
+                                  )}
+                                  onChange={(e) =>
+                                    handleToppingChange(e.target.value)
+                                  }
+                                />
+                                <label
+                                  className='form-check-label'
+                                  htmlFor={topping._id}
+                                >
+                                  {topping.name}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                          <button
+                            type='button'
+                            className='btn btn-success ms-2'
+                            onClick={() =>
+                              handleSavePizza(
+                                pizza._id,
+                                editedPizzaName,
+                                selectedToppings
+                              )
+                            }
+                          >
+                            Save
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {pizza.name}
+                          <div>
+                            <strong className='toppings-head'>Toppings:</strong>{' '}
+                            {getToppingNames(pizza.toppings).join(', ')}
+                          </div>
+                          <div>
+                          <img
+                            src={editIcon}
+                            alt='Edit'
+                            className='ms-2 delete-btn-img'
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handleEditPizza(pizza._id, pizza.name)}
+                          />
+                            <img
+                            src={deleteIcon}
+                            alt='Delete'
+                            className='ms-2 delete-btn-img'
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handleDeletePizza(pizza._id)}
+                          />
+                          </div>
+                        </>
+                      )}
                     </div>
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-          <input
-            type='text'
-            value={newToppingName}
-            onChange={(e) => setNewToppingName(e.target.value)}
-            placeholder='Enter new topping name'
-          />
-          <button onClick={handleCreateTopping}>Add Topping</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
-      <div className='card'>
-        <div className='card-body'>
-          <h5 className='card-title'>Pizzas</h5>
-          <ul className='list-group'>
-            {pizzasList.map((pizza) => (
-              <li
-                key={pizza._id}
-                className='list-group-item d-flex justify-content-between align-items-center'
-              >
-                <div>
-                  {editingPizzaId === pizza._id ? (
-                    <>
-                      <input
-                        type='text'
-                        value={editedPizzaName}
-                        onChange={(e) => setEditedPizzaName(e.target.value)}
-                        placeholder='Enter new pizza name'
-                      />
-                      <div className='mb-3'>
-                        <label className='form-label'>Toppings:</label>
-                        {toppingsList.map((topping) => (
-                          <div key={topping._id} className='form-check'>
-                            <input
-                              className='form-check-input'
-                              type='checkbox'
-                              id={topping._id}
-                              value={topping._id}
-                              checked={selectedToppings.includes(topping._id)}
-                              onChange={(e) =>
-                                handleToppingChange(e.target.value)
-                              }
-                            />
-                            <label
-                              className='form-check-label'
-                              htmlFor={topping._id}
-                            >
-                              {topping.name}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                      <button
-                        type='button'
-                        className='btn btn-success ms-2'
-                        onClick={() =>
-                          handleSavePizza(
-                            pizza._id,
-                            editedPizzaName,
-                            selectedToppings
-                          )
-                        }
-                      >
-                        Save
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      {pizza.name}
-                      <div>
-                        <strong>Toppings:</strong>{' '}
-                        {getToppingNames(pizza.toppings).join(', ')}
-                      </div>
-                      <div>
-                        <button
-                          type='button'
-                          className='btn btn-primary ms-2'
-                          onClick={() => handleEditPizza(pizza._id, pizza.name)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type='button'
-                          className='btn btn-danger ms-2'
-                          onClick={() => handleDeletePizza(pizza._id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </>
-                  )}
+      <div className='row justify-content-center'>
+        <div className='col-md-6'>
+          <div className='card create-pizza-card'>
+            <div className='card-body'>
+              <h5 className='card-title'>Create Pizza</h5>
+              <form onSubmit={handleCreatePizza}>
+                <div className='mb-3'>
+                  <label htmlFor='pizzaName' className='form-label'>
+                    Pizza Name:
+                  </label>
+                  <input
+                    type='text'
+                    id='pizzaName'
+                    value={pizzaName}
+                    onChange={(e) => setPizzaName(e.target.value)}
+                    required
+                  />
                 </div>
-              </li>
-            ))}
-          </ul>
-          <form onSubmit={handleCreatePizza}>
-      <div className='mb-3'>
-        <label htmlFor='pizzaName' className='form-label'>
-          Pizza Name:
-        </label>
-        <input
-          type='text'
-          id='pizzaName'
-          value={pizzaName}
-          onChange={(e) => setPizzaName(e.target.value)}
-          required
-        />
-      </div>
-      <div className='mb-3'>
-        <label className='form-label'>Toppings:</label>
-        {toppingsList.map((topping) => (
-          <div key={topping._id} className='form-check'>
-            <input
-              className='form-check-input'
-              type='checkbox'
-              id={topping._id}
-              value={topping._id}
-              checked={selectedToppings.includes(topping._id)}
-              onChange={(e) => handleToppingChange(e.target.value)}
-            />
-            <label className='form-check-label' htmlFor={topping._id}>
-              {topping.name}
-            </label>
-          </div>
-        ))}
-      </div>
+                <div className='mb-3 create-pizza'>
+                  <label className='form-label'>Toppings:</label>
+                  {toppingsList.map((topping) => (
+                    <div key={topping._id} className='form-check'>
+                      <input
+                        className='form-check-input'
+                        type='checkbox'
+                        id={topping._id}
+                        value={topping._id}
+                        checked={selectedToppings.includes(topping._id)}
+                        onChange={(e) => handleToppingChange(e.target.value)}
+                      />
+                      <label className='form-check-label' htmlFor={topping._id}>
+                        {topping.name}
+                      </label>
+                    </div>
+                  ))}
+                </div>
 
-      <button type='submit' className='btn btn-primary'>
-        Create Pizza
-      </button>
-    </form>
+                <button type='submit' className='btn btn-success'>
+                  Create Pizza
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>

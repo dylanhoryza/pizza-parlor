@@ -1,4 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap');
+
 body {
   background-color: black;
   color: white;
+  background-image: url('../src/assets/pizza-bg-4.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Cabin Sketch', sans-serif;
+}
+
+.create-pizza-card {
+  margin-top: 20px;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 50px;
+  font-weight: bold;
+  font-size: 60px;
+}
+
+
+
+.card-body {
+  max-height: 400px; 
+  min-height: 400px;
+  overflow-y: auto; 
+  
+}
+
+.create-pizza-card {
+  grid-column: span 2; 
+  background-color: #5B544C;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); 
+  transition: box-shadow 0.3s ease-in-out;
+  color: white;
+}
+
+.toppings-card, .pizzas-card {
+  background-color: #5B544C;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); 
+  transition: box-shadow 0.3s ease-in-out;
+  color: white;
+}
+
+.toppings-card:hover, .pizzas-card:hover, .create-pizza-card:hover {
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.6);
+}
+
+.list-group-item {
+  background-color: #5B544C;
+  color: white;
+}
+
+.delete-btn-img {
+  width: 20px;
+}
+
+.toppings-head {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.topping-input {
+  margin-top: 30px;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+
+.form-label {
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+.card-title {
+  font-size: 24px;
+  margin-bottom: 10px;
 }

@@ -132,7 +132,7 @@ export default function HomePage() {
       return topping ? topping.name : 'Unknown Topping';
     });
   };
-
+  // Function to create a new pizza
   const handleCreatePizza = async (e) => {
     e.preventDefault();
     try {
@@ -158,7 +158,7 @@ export default function HomePage() {
       console.error(error);
     }
   };
-
+  // Function to select changed toppings
   const handleToppingChange = (toppingId) => {
     setSelectedToppings((prevSelectedToppings) => {
       if (prevSelectedToppings.includes(toppingId)) {
@@ -168,12 +168,12 @@ export default function HomePage() {
       }
     });
   };
-
+  // Edit and display edited Pizza
   const handleEditPizza = (pizzaId, currentName) => {
     setEditingPizzaId(pizzaId);
     setEditedPizzaName(currentName);
   };
-
+// Function to save updated pizza and pass the new selected toppings
   const handleSavePizza = async (pizzaId, updatedName, selectedToppings) => {
     try {
       const res = await updatePizza(pizzaId, {
@@ -197,7 +197,7 @@ export default function HomePage() {
       console.error(error);
     }
   };
-
+  // Function to delete pizza from the database
   const handleDeletePizza = async (pizzaId) => {
     try {
       const res = await deletePizza(pizzaId);

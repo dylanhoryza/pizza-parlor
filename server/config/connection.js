@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://dylanhoryza:dog123@cluster0.ezqwhyq.mongodb.net/pizzaparlor?retryWrites=true&w=majority');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/pizzaparlor');
 
 module.exports = mongoose.connection;

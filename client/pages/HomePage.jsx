@@ -51,13 +51,13 @@ export default function HomePage() {
         alert(`Topping "${newToppingName}" already exists!`);
         return; // Exit function if topping already exists
       }
-      const res = await createTopping({ name: newToppingName }); // Send the new topping name to the API
+      const res = await createTopping({ name: newToppingName }); 
       if (!res.ok) {
         throw new Error('Failed to create topping');
       }
       const createdTopping = await res.json();
-      setToppings([...toppingsList, createdTopping]); // Update the toppings list with the newly created topping
-      setNewToppingName(''); // Clear the input field after successful creation
+      setToppings([...toppingsList, createdTopping]); 
+      setNewToppingName(''); 
     } catch (error) {
       console.error(error);
     }
@@ -84,7 +84,7 @@ export default function HomePage() {
         return topping;
       });
       setToppings(updatedToppings);
-      setEditingToppingId(null); // Clear editing state after successful update
+      setEditingToppingId(null); 
     } catch (error) {
       console.error(error);
     }
@@ -152,8 +152,8 @@ export default function HomePage() {
       }
       const createdPizza = await res.json();
       setPizzas([...pizzasList, createdPizza]);
-      setPizzaName(''); // Clear the pizza name input field
-      setSelectedToppings([]); // Clear the selected toppings
+      setPizzaName(''); 
+      setSelectedToppings([]); 
     } catch (error) {
       console.error(error);
     }

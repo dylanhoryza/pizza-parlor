@@ -25,13 +25,13 @@ connection.once('open', async () => {
     // Insert toppings into the database
     const insertedToppings = await Toppings.insertMany(toppings);
 
-    // Create a mapping of topping names to their ObjectId values
+    // Map toppings name to their id
     const toppingMap = {};
     insertedToppings.forEach(topping => {
       toppingMap[topping.name] = topping._id;
     });
 
-    // Modify pizzas data to replace topping names with ObjectId values
+    // Map pizzas to include their topping name
     const pizzasWithToppings = pizzas.map(pizza => ({
       ...pizza,
       toppings: pizza.toppings.map(toppingName => toppingMap[toppingName])

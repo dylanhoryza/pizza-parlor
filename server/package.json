@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest",
     "start": "node server.js",
     "watch": "nodemon",
     "seed": "node seeds/seed"
@@ -17,6 +17,7 @@
     "mongoose": "^8.1.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "supertest": "^6.3.4"
   }
 }
